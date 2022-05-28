@@ -67,7 +67,7 @@ nog.config.work_mode = true
 -- draws the app bar while nog is in work mode
 nog.config.display_app_bar = true
 -- nog.config.display_app_bar = false
-nog.config.launch_on_startup = true
+nog.config.launch_on_startup = false
 nog.config.multi_monitor = true
 -- hides the task bar while nog is in work mode
 nog.config.remove_task_bar = t
