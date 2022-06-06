@@ -1,0 +1,6 @@
+*
+!.gitignore
+!scripts/ahk/*
+!scripts/bat/*
+!AppData/Roaming/.emacs
+!AppData/Roaming/.startup.el
