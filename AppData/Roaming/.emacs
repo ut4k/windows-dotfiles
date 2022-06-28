@@ -252,7 +252,6 @@ In interactive calls DELETE is the prefix arg."
   (interactive)
   (insert (concat "#+attr_org: :width 40%\n"))
   )
-;(define-key org-mode-map (kbd "C-i") 'smaller-img)
 
 ; org-html--format-imageの依存
 (defun replace-in-string (what with in)
@@ -270,6 +269,10 @@ In interactive calls DELETE is the prefix arg."
 ;              (buffer-string)))
 ;            (file-name-nondirectory source))))
 
+(defun org-export-to-html-custom ()
+   (interactive)
+   (message "exporting to html file...")
+   (org-html-export-to-html))
 
 ;; ---------------------------------
 ;; Keybindings
@@ -282,8 +285,15 @@ In interactive calls DELETE is the prefix arg."
 (global-set-key [f5] 'delete-duplicate-lines)
 (global-set-key (kbd "C-c d") 'org+-kill-list-item)
 (global-set-key "\C-cs" 'my-org-screenshot)
-; (define-key org-mode-map (kbd "C-c j") 'ced/sum-hours-in-list)
-; (define-key org-mode-map (kbd "C-.") 'org-toggle-inline-images)
+; org-mode-map
+(with-eval-after-load "org"
+		(message "hello")
+		(define-key org-mode-map "C-x C-m" 'smaller-img)
+		(define-key org-mode-map (kbd "C-c j") 'ced/sum-hours-in-list)
+		(define-key org-mode-map (kbd "C-.") 'org-toggle-inline-images)
+		(define-key org-mode-map (kbd "C-c z") 'org-export-to-html-custom)
+)
+
 
 ;; ---------------------------------
 ;; Package-Settings
@@ -312,6 +322,7 @@ In interactive calls DELETE is the prefix arg."
 ;; ---------------------------------
 (set-face-attribute 'default nil :family "PlemolJP35 Console NF Medium" :height 90)
 (set-fontset-font nil '(#x80 . #x10ffff) (font-spec :family "PlemolJP35 Console NF Medium"))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ----------------------------------
