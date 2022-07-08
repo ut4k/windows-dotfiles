@@ -125,6 +125,9 @@
 ; 改行を保持する
 (setq org-export-preserve-breaks nil)
 (setq org-ascii-text-width most-positive-fixnum)
+(setq org-ascii-headline-spacing nil)
+
+(setq split-width-threshold nil)
 
 ;; Emoji: 😄, 🤦, 🏴󠁧󠁢󠁳󠁣󠁴󠁿
 (set-fontset-font t 'symbol "Apple Color Emoji")
@@ -274,6 +277,11 @@ In interactive calls DELETE is the prefix arg."
    (message "exporting to html file...")
    (org-html-export-to-html))
 
+(defun org-to-daily-report ()
+   (interactive)
+   (message "exporting to text file...")
+   (org-ascii-export-as-ascii))
+
 ;; ---------------------------------
 ;; Keybindings
 ;; ---------------------------------
@@ -292,12 +300,23 @@ In interactive calls DELETE is the prefix arg."
 		(define-key org-mode-map (kbd "C-c j") 'ced/sum-hours-in-list)
 		(define-key org-mode-map (kbd "C-.") 'org-toggle-inline-images)
 		(define-key org-mode-map (kbd "C-c z") 'org-export-to-html-custom)
+		(define-key org-mode-map (kbd "C-c t") 'org-to-daily-report)
 )
 
 
 ;; ---------------------------------
 ;; Package-Settings
 ;; ---------------------------------
+
+(require 'helm-config)
+(helm-mode 1)
+
+(global-set-key (kbd "C-x M-f") 'helm-recentf) ; doesn't really work... >_<!
+(global-set-key (kbd "C-x b")   'helm-buffers-list)
+(global-set-key (kbd "C-x C-b") 'ibuffer) ; different buffer handler
+(global-set-key (kbd "M-x")     'helm-M-x)
+(global-set-key (kbd "C-x f")   'helm-find-files)
+(global-set-key (kbd "C-c b")   'helm-bookmarks)
 
 ;; htmlize
 (require 'htmlize)
@@ -322,7 +341,6 @@ In interactive calls DELETE is the prefix arg."
 ;; ---------------------------------
 (set-face-attribute 'default nil :family "PlemolJP35 Console NF Medium" :height 90)
 (set-fontset-font nil '(#x80 . #x10ffff) (font-spec :family "PlemolJP35 Console NF Medium"))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ----------------------------------
@@ -362,7 +380,7 @@ In interactive calls DELETE is the prefix arg."
  '(org-fontify-done-headline nil)
  '(org-fontify-todo-headline nil)
  '(package-selected-packages
-   '(color-theme-sanityinc-tomorrow org-bullets htmlize ox-pandoc spacemacs-theme-dark spacemacs-theme zenburn-theme use-package org-download))
+   '(helm color-theme-sanityinc-tomorrow org-bullets htmlize ox-pandoc spacemacs-theme-dark spacemacs-theme zenburn-theme use-package org-download))
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
