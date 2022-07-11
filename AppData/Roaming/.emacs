@@ -24,8 +24,10 @@
 ;; ---------------------------------
 ;; Basics
 ;; ---------------------------------
-;デフォルトのワーキンjグディレクトリをデスクトップにする
+;デフォルトのワーキングディレクトリをデスクトップにする
 (setq default-directory "C:\\Users\\kimura.AZET\\Desktop\\")
+
+(setq whitespace-style '(trailing tabs newline tab-mark newline-mark))
 
 ; org-agenda
 ;(setq org-agenda-files (list "C:\\org\\work.org"))
@@ -328,6 +330,10 @@ In interactive calls DELETE is the prefix arg."
 (setq org-download-annotate-function (lambda (_link) ""))
 ;(require 'org)
 
+(require 'tree-sitter)
+(require 'tree-sitter-langs)
+(global-tree-sitter-mode)
+
 ; ;;;;; ox-pandoc ;;;;;
 ; html5でエクスポートするとき画像はbase64化する。
 (setq org-pandoc-options-for-html5 '((standalone . t) (self-contained . t)))
@@ -380,7 +386,7 @@ In interactive calls DELETE is the prefix arg."
  '(org-fontify-done-headline nil)
  '(org-fontify-todo-headline nil)
  '(package-selected-packages
-   '(helm color-theme-sanityinc-tomorrow org-bullets htmlize ox-pandoc spacemacs-theme-dark spacemacs-theme zenburn-theme use-package org-download))
+   '(php-mode tree-sitter-langs helm color-theme-sanityinc-tomorrow org-bullets htmlize ox-pandoc spacemacs-theme-dark spacemacs-theme zenburn-theme use-package org-download))
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
