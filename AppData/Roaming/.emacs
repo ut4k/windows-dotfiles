@@ -70,6 +70,7 @@
 ;; なんだっけ?
 (remove-hook 'find-file-hooks 'vc-refresh-state)
 ;; 見た目
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -77,6 +78,15 @@
  ;; If there is more than one, they won't work right.
  '(doom-modeline-bar ((t (:background "#6272a4"))))
  '(org-table ((t (:foreground "LightSkyBlue" :family "ゆたぽん（コーディング）")))))
+
+(set-face-attribute 'default nil :family "ゆたぽん（コーディング）" :height 120)
+(set-fontset-font (frame-parameter nil 'font)
+                  'japanese-jisx0208
+                  (font-spec :family "ゆたぽん（コーディング）"))
+(add-to-list 'face-font-rescale-alist
+             '("ゆたぽん（コーディング）" . 1.2))
+
+(setq org-pretty-entities t)
 ;; ツールバーを隠す
 (tool-bar-mode -1)
 ;; スクロールバーを隠す
@@ -107,7 +117,10 @@
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 ;; org 
 ; 画像をインライン表示する
-(setq org-startup-with-inline-images t)
+; (setq org-startup-with-inline-images t)
+; 画像をインライン表示しない
+;(org-toggle-inline-images &optional INCLUDE-LINKED)
+
 ; 作成日付けを記入しない
 (setq org-export-with-timestamps nil)
 (setq org-export-time-stamp-file nil)
@@ -129,7 +142,69 @@
 (setq org-ascii-text-width most-positive-fixnum)
 (setq org-ascii-headline-spacing nil)
 
-(setq split-width-threshold nil)
+;(setq split-width-threshold nil)
+(setq split-width-threshold 0)
+(setq split-height-threshold nil)
+
+; enable indentation
+; (setq org-adapt-indentation t)
+
+; disable indentation
+(setq org-adapt-indentation nil)
+(electric-indent-mode -1) ; globally
+
+;;------------------------------------------------------------------------
+;(setq org-latex-pdf-process
+;      '("platex -shell-escape %f"
+;        "platex -shell-escape %f"
+;        "pbibtex %b"
+;        "platex -shell-escape %f"
+;        "platex -shell-escape %f"
+;        "dvipdfmx %b.dvi"))
+
+
+(setq org-latex-pdf-process
+      '("platex -shell-escape %f"
+        "dvipdfmx %b.dvi"))
+
+(require 'ox-latex)
+(with-eval-after-load 'ox-latex
+	(add-to-list 'org-latex-classes
+          '("\\makeatletter"
+             ("\\renewcommand{\tableofcontents}{%")
+             (" \\@starttoc{toc}%")
+             ("}")
+             ("\\makeatother")))
+)
+;;------------------------------------------------------------------------
+
+;; -----------------------------------------------------------------------
+; クリップボードから画像を貼り付ける
+;https://lists.gnu.org/archive/html/emacs-orgmode/2011-07/msg01292.html
+
+(defun org-screenshot ()
+  "Take a screenshot into a time stamped unique-named file in the same 
+directory as the org-buffer and insert
+a link to this file."
+  (interactive)
+  (setq tilde-buffer-filename
+        (replace-regexp-in-string "/" "\\" (buffer-file-name) t t))
+  (setq filename
+        (concat
+         (make-temp-name
+          (concat tilde-buffer-filename
+                  "_"
+                  (format-time-string "%Y%m%d_%H%M%S_")) ) ".jpg"))
+  ;; Linux: ImageMagick: (call-process "import" nil nil nil filename)
+  ;; Windows: Irfanview
+  (call-process "C:\\Program Files\\IrfanView\\i_view64.exe" nil nil nil (concat 
+"/clippaste /convert=" filename))
+  (insert (concat "[[file:" filename "]]"))
+  (org-display-inline-images))
+
+(global-set-key (kbd "C-x p") 'org-screenshot)
+
+;; -----------------------------------------------------------------------
 
 ;; Emoji: 😄, 🤦, 🏴󠁧󠁢󠁳󠁣󠁴󠁿
 (set-fontset-font t 'symbol "Apple Color Emoji")
@@ -274,6 +349,30 @@ In interactive calls DELETE is the prefix arg."
 ;              (buffer-string)))
 ;            (file-name-nondirectory source))))
 
+(defun org-html--format-image (source attributes info)
+  (format "<img src=\"data:image/%s;base64,%s\"%s />"
+      (or (file-name-extension source) "")
+      (base64-encode-string
+       (with-temp-buffer
+     (insert-file-contents-literally source)
+     (buffer-string)))
+      (file-name-nondirectory source)))
+
+(defun org-html-export-to-mhtml (async subtree visible body)
+  (cl-letf (((symbol-function 'org-html--format-image) 'format-image-inline))
+    (org-html-export-to-html nil subtree visible body)))
+
+(defun format-image-inline (source attributes info)
+  (let* ((ext (file-name-extension source))
+         (prefix (if (string= "svg" ext) "data:image/svg+xml;base64," "data:;base64,"))
+         (data (with-temp-buffer (url-insert-file-contents source) (buffer-string)))
+         (data-url (concat prefix (base64-encode-string data)))
+         (attributes (org-combine-plists `(:src ,data-url) attributes)))
+    (org-html-close-tag "img" (org-html--make-attribute-string attributes) info)))
+
+;(org-export-define-derived-backend 'html-inline-images 'html
+;  :menu-entry '(?h "Export to HTML" ((?m "As MHTML file and open" org-html-export-to-mhtml))))
+
 (defun org-export-to-html-custom ()
    (interactive)
    (message "exporting to html file...")
@@ -312,6 +411,9 @@ In interactive calls DELETE is the prefix arg."
 
 (require 'helm-config)
 (helm-mode 1)
+(setq projectile-enable-caching t)
+(setq helm-projectile-fuzzy-match nil)
+;(setq helm-projectile-fuzzy-match nil)
 
 (global-set-key (kbd "C-x M-f") 'helm-recentf) ; doesn't really work... >_<!
 (global-set-key (kbd "C-x b")   'helm-buffers-list)
@@ -319,6 +421,44 @@ In interactive calls DELETE is the prefix arg."
 (global-set-key (kbd "M-x")     'helm-M-x)
 (global-set-key (kbd "C-x f")   'helm-find-files)
 (global-set-key (kbd "C-c b")   'helm-bookmarks)
+
+(when (executable-find "rg")
+  (require 'helm-ag)
+  (defvar helm-ag-base-command)
+  (defvar helm-ag-insert-at-point)
+  (defvar helm-ag-ignore-patterns)
+  ;; ag のデフォルトのコマンドオプションを指定
+  ;; -n を消すとサブディレクトリも再帰的に検索
+  ;; (setq helm-ag-base-command "ag --nocolor --nogroup -n")
+  ;(setq helm-ag-base-command "ag --nocolor --nogroup")
+  (setq helm-ag-base-command "rg -S --vimgrep --no-heading")    ; ripgrepが必要
+  ;;; ポイント位置のシンボルをデフォルトのクエリにする
+  (setq helm-ag-insert-at-point 'symbol)
+  ;; 検索で無視するファイルパターン (ag --ignore xxxx に渡す文字列を設定)
+  ;; (setq helm-ag-ignore-patterns '("*~" "#.*#" "TAGS"))
+  ;; 無視パターンに grep.el の変数を使う
+  (setq helm-ag-use-grep-ignore-list t)
+  ;; process-file を呼び出す前に R/W の coding system を強制的に設定
+  ;; (defadvice process-file (before configure-process-coding activate)
+  ;;   "Configure process coding for Cyrgin application."
+  ;;   (setq coding-system-for-read  'utf-8-dos)     ;; 行末の ^M を避けるため -dos が必要
+  ;;   (setq coding-system-for-write 'cp932-dos)
+  ;;   )
+  ;; :around による advice
+  (defun set-rw-coding-system:around (orig-func &rest args)
+    (let ((coding-system-for-read  'utf-8-dos) ; 行末の ^M を避けるため -dos が必要
+          (coding-system-for-write 'cp932-dos))
+      (apply orig-func args)          ; オリジナル関数を呼び出し
+      ))
+  (advice-add 'process-file :around #'set-rw-coding-system:around)
+  ;; === キーバインド ===
+  (global-set-key (kbd "C-M-g") 'helm-ag)
+  (global-set-key (kbd "C-M-k") 'backward-kill-sexp) ;推奨
+  )
+
+
+
+(global-set-key (kbd "C-c f")   'helm-ag)
 
 ;; htmlize
 (require 'htmlize)
@@ -340,13 +480,45 @@ In interactive calls DELETE is the prefix arg."
 
 (setq org-latex-packages-alist '(("" "fullpage") ("avoid-all" "widows-and-orphans") ("" "svg")))
 
+
+; ;;;;; highlight-indent-guides ;;;;;
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+(setq highlight-indent-guides-method 'character)
+;(setq highlight-indent-guides-method 'bitmap)
+;(setq highlight-indent-guides-character "▏")
+(setq highlight-indent-guides-responsive "stack")
+
+; ;;;;; helm-posframe ;;;;;
+(helm-posframe-enable)
+
+; ;;;;; all-the-icons ;;;;;
+(require 'all-the-icons)
+
+; ;;;;; projectile ;;;;;
+; ;;;;; helm-projectile ;;;;;
+(projectile-mode)
+(global-set-key (kbd "C-c p")   'projectile-find-file)
+(setq helm-projectile-fuzzy-match 1)
+;(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+; ;;;;; https://github.com/dnxbjyj/pasteex-mode ;;;;;
+;(add-to-list 'load-path (expand-file-name  "C:\\Users\\kimura.AZET\\.emacs.d\\pasteex-mode"))
+;(require 'pasteex-mode)
+;(setq pasteex-executable-path "C:\\app\\PasteEx\\PasteEx.exe")
+;(global-set-key (kbd "C-x p") 'pasteex-image)
+
 ;; ---------------------------------
 ;; Font
 ;;
 ;; https://misohena.jp/blog/2017-09-26-symbol-font-settings-for-emacs25.html
 ;; ---------------------------------
-(set-face-attribute 'default nil :family "PlemolJP35 Console NF Medium" :height 90)
-(set-fontset-font nil '(#x80 . #x10ffff) (font-spec :family "PlemolJP35 Console NF Medium"))
+;(set-face-attribute 'default nil :family "PlemolJP35 Console NF Medium" :height 90)
+;(set-fontset-font nil '(#x80 . #x10ffff) (font-spec :family "PlemolJP35 Console NF Medium"))
+
+(set-face-attribute 'default nil :family "CaskaydiaCove NF" :height 94 :weight 'light)
+(set-face-attribute 'mode-line nil :family "CaskaydiaCove NF" :height 94 :weight 'light)
+(setq-default line-spacing -2)
+;(set-fontset-font nil '(#x80 . #x10ffff) (font-spec :family "CaskaydiaCove NF"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ----------------------------------
@@ -386,7 +558,7 @@ In interactive calls DELETE is the prefix arg."
  '(org-fontify-done-headline nil)
  '(org-fontify-todo-headline nil)
  '(package-selected-packages
-   '(php-mode tree-sitter-langs helm color-theme-sanityinc-tomorrow org-bullets htmlize ox-pandoc spacemacs-theme-dark spacemacs-theme zenburn-theme use-package org-download))
+   '(helm-projectile projectile all-the-icons helm-posframe helm-ag highlight-indent-guides php-mode tree-sitter-langs helm color-theme-sanityinc-tomorrow org-bullets htmlize ox-pandoc spacemacs-theme-dark spacemacs-theme zenburn-theme use-package org-download))
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
