@@ -1,0 +1,11 @@
+[helpers]
+
+[default]
+depends = []
+
+[default.variables]
+
+[default.files]
+"nvim-prime" = { target = "~/AppData/Local/nvim-prime", type = "symbolic" }
+"emacs/.emacs" = { target = "~/AppData/.emacs", type = "symbolic" }
+"scripts" = { target = "~/scripts", type = "symbolic" }
