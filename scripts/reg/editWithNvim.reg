@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+  [HKEY_CLASSES_ROOT\*\shell\nvim]
+  @="Edit with Neovim"
+  "Icon"="\"C:\\app\\goneovim-v0.6.4-windows\\goneovim.exe\""
+
+  [HKEY_CLASSES_ROOT\*\shell\nvim\command]
+  @="C:\\app\\goneovim-v0.6.4-windows\\goneovim.exe \"%1\""

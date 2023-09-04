@@ -1,0 +1,1 @@
+mklink %homedrive%%homepath%\.emacs %homedrive%%homepath%\AppData\Roaming\.emacs
