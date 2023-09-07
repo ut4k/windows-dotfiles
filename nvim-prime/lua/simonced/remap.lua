@@ -153,3 +153,8 @@ vim.keymap.set("n", "<leader>w", ":w<CR>", {remap = false})
 -- })
 
 vim.keymap.set("n", "<leader>ap", ":ALEPopulateQuickfix<CR>", {remap = false})
+
+vim.keymap.set("n", "<leader>T", ":TestNearest<CR>", {remap = false})
+vim.cmd[[
+  let g:test#echo_command = 1
+]]

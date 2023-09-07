@@ -2,12 +2,8 @@
 ;; Init
 ;; ---------------------------------
 (setq user-dir (getenv "HOME"))
-(setq dotemacs-file (concat user-dir "\\AppData\\Roaming\\.emacs"))
+(setq dotemacs-file (concat user-dir "\\.emacs"))
 (setq custom-file (concat user-dir "\\custom.el"))
-(setq my-font "PlemolJP35 Console NF")
-(setq my-second-font "PlemolJP35 Console NF")
-;;(setq my-font "Cascadia Code")
-;;(setq my-second-font "PlemolJP35 Console35")
 
 ;;straight.el
 (defvar bootstrap-version)
@@ -62,7 +58,7 @@
 ;; ---------------------------------
 (load-file custom-file)
 ;; マウス選択範囲を自動でコピーする 
-(setq mouse-drag-copy-region t)
+(setq mouse-drag-copy-region nil)
 ;;デフォルトのワーキングディレクトリをデスクトップにする
 ;;(setq default-directory (concat user-dir "\\Desktop\\"))
 ;;フレームタイトルにディレクトリを表示
@@ -417,7 +413,7 @@ In interactive calls DELETE is the prefix arg."
 (setq org-ascii-bullets '((ascii ?- ?- ?-) (latin1 ?- ?- ?-) (utf-8 ?- ?- ?-)))
 
 ;;(setq org-bullets-bullet-list '("" "" "" "" "" "" "" "" "" ""))
-(setq org-bullets-bullet-list '("◎" "▼" "▽" "▽"))
+(setq org-bullets-bullet-list '("❖" "◆" "▼" "•"))
 
 ;; org-superstar
 (setq inhibit-compacting-font-caches t)
@@ -451,8 +447,8 @@ In interactive calls DELETE is the prefix arg."
 
 ;; ;;;;; dashborad
 (dashboard-setup-startup-hook)
-(setq dashboard-items '((recents  . 4)
-                        (projects . 2)))
+(setq dashboard-items '((recents  . 5)
+                        ))
 
 (setq dashboard-startup-banner 'logo) 
 (setq dashboard-center-content t)
@@ -569,12 +565,23 @@ In interactive calls DELETE is the prefix arg."
 ;; IME の設定をした後には実行しないこと
 ;; (set-language-environment "Japanese")
 
-(prefer-coding-system 'utf-8-unix)
+;(set-default-coding-systems 'utf-8-dos)
+(set-default-coding-systems 'utf-8)
+;(prefer-coding-system 'utf-8-unix)
 (set-file-name-coding-system 'cp932)
-(setq locale-coding-system 'utf-8-unix)
-
-;(set-language-environment "UTF-8")
+;(setq locale-coding-system 'utf-8-unix)
+(set-language-environment "UTF-8")
+(set-locale-environment "ja_JP.UTF-8")
+(prefer-coding-system 'utf-8)
+;(setq system-time-locale nil)
 ;(setq system-time-locale "C")
+
+(defun org-mode-time-locale ()
+  (set (make-local-variable 'system-time-locale) "C"))
+;カスタムフォーマットにするとS-up/downで変更できなくなる
+;(setq-default org-display-custom-times t)
+;(setq org-time-stamp-custom-formats '("<%Y/%m/%d>" . "<%Y/%m/%d %H:%M:%>"))
+
 
 ;; プロセスが出力する文字コードを判定して、process-coding-system の DECODING の設定値を決定する
 (setq default-process-coding-system '(undecided-dos . utf-8-unix))
@@ -603,17 +610,35 @@ In interactive calls DELETE is the prefix arg."
 ;;(set-face-attribute 'default nil :family "Inconsolata" :height 120)
 ;; ASCII以外のUnicodeコードポイント全部を一括で設定する。他国語を使用する人は細かく指定した方が良いかも。
 ;;(set-fontset-font nil '(#x80 . #x10ffff) (font-spec :family "MS Gothic"))
-
-(set-face-attribute 'mode-line nil :family my-font :height 110 :weight 'normal)
-(set-face-attribute 'default nil :family my-font :height 110 :weight 'normal)
-;(set-fontset-font t 'japanese-jisx0208 (font-spec :family "PlemolJP35 Console NF"))
-(set-fontset-font t 'japanese-jisx0208 (font-spec :family my-font))
-(setq-default line-spacing 0)
-
-
-;; 記号をデフォルトのフォントにしない。(for Emacs 25.2)
 (setq use-default-font-for-symbols nil)
 
+(setq my-font "PlemolJP35 Console NF")
+;(setq my-second-font "ＭＳ Ｐゴシック")
+(setq my-second-font "Terminus-ja")
+
+;; Set the default font for all text
+(set-face-attribute 'default nil :family my-font :height 100 :weight 'normal)
+
+(defun set-org-font ()
+  "Set the font for Org Mode buffers."
+  (face-remap-add-relative 'default :family my-second-font :height 120 :weight 'normal))
+
+(defun restore-default-font ()
+  "Restore the default font for non-Org Mode buffers."
+  (interactive)
+  (face-remap-reset-base 'default))
+
+(add-hook 'org-mode-hook #'set-org-font)
+(add-hook 'after-change-major-mode-hook #'restore-default-font)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (set-fontset-font t 'japanese-jisx0208 (font-spec :family my-second-font))))
+
+(custom-set-faces
+  '(org-default ((t (:family my-second-font :height 1.2))))
+)
+
+(setq-default line-spacing 0)
 
 ;;https://www.philnewton.net/guides/emacs-as-a-php-editor/
 ;; 下記のファイルはweb-modeで扱う
@@ -648,12 +673,6 @@ Version 2016-12-27"
   (replace-match (number-to-string (1+ (string-to-number (match-string 0))))))
 
 (global-set-key (kbd "C-c +") 'increment-number-at-point)
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 (defun create-scratch-buffer nil
   "create a scratch buffer"
@@ -675,3 +694,16 @@ Version 2016-12-27"
     (kill-new url)
     (message (concat "Copied URL: " url))))
 (define-key org-mode-map (kbd "C-x C-l") 'farynaio/org-link-copy)
+
+
+;(custom-set-faces
+; '(org-level-1 ((t (:underline t :background "black")))))
+
+(custom-set-faces
+ '(org-block ((t (:background "#1f1f1f" :border "2px solid red")))))
+
+(custom-set-faces
+  '(org-level-1 ((t (:underline t)))))
+
+(global-font-lock-mode t)
+(setq org-src-fontify-natively t)

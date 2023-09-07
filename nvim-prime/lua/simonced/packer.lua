@@ -138,6 +138,7 @@ return require('packer').startup({function(use)
 	-- 	"narutoxy/dim.lua",
 	-- 	requires = { "nvim-treesitter/nvim-treesitter", "neovim/nvim-lspconfig" },
 	-- }
+	use 'vim-test/vim-test'
 end,
 config = {
   display = {

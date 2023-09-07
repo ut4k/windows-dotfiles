@@ -7,5 +7,5 @@ depends = []
 
 [default.files]
 "nvim-prime" = { target = "~/AppData/Local/nvim-prime", type = "symbolic" }
-"emacs/.emacs" = { target = "~/AppData/.emacs", type = "symbolic" }
+"emacs/.emacs" = { target = "~/.emacs", type = "symbolic" }
 "scripts" = { target = "~/scripts", type = "symbolic" }

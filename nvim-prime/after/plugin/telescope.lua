@@ -56,6 +56,7 @@ function Vimfiles()
 	-- end
 	local opts = {
 		cwd = folder,
+		follow = true,
 	--	file_ignore_patterns = {'.git'},
 	--	previewer = false,
 		-- try to not show the whole path because I don't need it: none of below seems to work...
