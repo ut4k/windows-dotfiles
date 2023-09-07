@@ -9,3 +9,4 @@ depends = []
 "nvim-prime" = { target = "~/AppData/Local/nvim-prime", type = "symbolic" }
 "emacs/.emacs" = { target = "~/.emacs", type = "symbolic" }
 "scripts" = { target = "~/scripts", type = "symbolic" }
+".eslintrc.json" = { target = "~/.eslintrc.json", type = "symbolic" }
