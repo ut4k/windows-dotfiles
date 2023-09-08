@@ -49,6 +49,7 @@ vim.keymap.set('n', '<s-l>', ':vert resize -15<cr>', {remap=false})
 
 -- save
 vim.keymap.set('n', '<leader>s', ':w<cr>', {remap=false})
+vim.keymap.set("n", "<leader>w", ":w<CR>", {remap = false})
 
 -- semicolon as a colon
 vim.keymap.set('n', ';', ':', {remap=false})
@@ -136,7 +137,6 @@ function StartNewNvim()
 end
 vim.keymap.set("n", "<leader>nv", ":lua StartNewNvim()<CR>", {remap = false})
 
-vim.keymap.set("n", "<leader>w", ":w<CR>", {remap = false})
 
 
 -- require('lint').linters_by_ft = {
@@ -157,4 +157,23 @@ vim.keymap.set("n", "<leader>ap", ":ALEPopulateQuickfix<CR>", {remap = false})
 vim.keymap.set("n", "<leader>T", ":TestNearest<CR>", {remap = false})
 vim.cmd[[
   let g:test#echo_command = 1
+]]
+
+vim.keymap.set("n", "<leader>M", ":redir @a | silent map | redir END | new | put a<CR>", {remap = false})
+
+-- vim-eft
+vim.cmd[[
+  nmap f <Plug>(eft-f)
+  xmap f <Plug>(eft-f)
+  omap f <Plug>(eft-f)
+  nmap F <Plug>(eft-F)
+  xmap F <Plug>(eft-F)
+  omap F <Plug>(eft-F)
+  
+  nmap t <Plug>(eft-t)
+  xmap t <Plug>(eft-t)
+  omap t <Plug>(eft-t)
+  nmap T <Plug>(eft-T)
+  xmap T <Plug>(eft-T)
+  omap T <Plug>(eft-T)
 ]]

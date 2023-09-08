@@ -52,6 +52,7 @@
 (straight-use-package 'color-theme-sanityinc-tomorrow)
 (straight-use-package 'ample-theme)
 (straight-use-package 'swiper)
+(straight-use-package 'emojify)
 
 ;; ---------------------------------
 ;; Basics
@@ -413,7 +414,7 @@ In interactive calls DELETE is the prefix arg."
 (setq org-ascii-bullets '((ascii ?- ?- ?-) (latin1 ?- ?- ?-) (utf-8 ?- ?- ?-)))
 
 ;;(setq org-bullets-bullet-list '("" "" "" "" "" "" "" "" "" ""))
-(setq org-bullets-bullet-list '("❖" "◆" "▼" "•"))
+(setq org-bullets-bullet-list '("❖" "◆" "▼" "＊" "•" "•"))
 
 ;; org-superstar
 (setq inhibit-compacting-font-caches t)
@@ -681,8 +682,8 @@ Version 2016-12-27"
   (lisp-interaction-mode))           
 
 ;; ----------------------------
-;(require 'emojify)
-;(global-emojify-mode)
+(require 'emojify)
+(global-emojify-mode)
 
 (defun farynaio/org-link-copy (&optional arg)
   "Extract URL from org-mode link and add it to kill ring."
@@ -707,3 +708,21 @@ Version 2016-12-27"
 
 (global-font-lock-mode t)
 (setq org-src-fontify-natively t)
+
+(setq org-export-headline-levels 0)
+(setq org-export-with-section-numbers nil)
+(setq org-export-with-toc nil)
+
+(defun 795-now-playing ()
+  (interactive)
+  (let ((data (get-json "https://www.nack5.co.jp/on-air.json")))
+	(message "Song: `%s` by `%s`" (alist-get 'music_title data) (alist-get 'artist_name data))
+	))
+
+(defun get-json (uri)
+  "Fetch the contents of URI and parse."
+  (with-current-buffer (url-retrieve-synchronously uri)
+    (goto-char (point-min))
+    (goto-char url-http-end-of-headers)
+    (prog1 (json-read)
+      (kill-buffer))))

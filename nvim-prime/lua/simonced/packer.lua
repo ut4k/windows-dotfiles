@@ -139,9 +139,23 @@ return require('packer').startup({function(use)
 	-- 	requires = { "nvim-treesitter/nvim-treesitter", "neovim/nvim-lspconfig" },
 	-- }
 	use 'vim-test/vim-test'
+	use 'hrsh7th/vim-eft'
+	use 'mg979/vim-visual-multi'
+
+	vim.cmd[[
+	aug VMlens
+	au!
+	au User visual_multi_start lua require('vmlens').start()
+	au User visual_multi_exit lua require('vmlens').exit()
+	aug END
+	]]
+
+	use 'kevinhwang91/nvim-hlslens'
+	use 'haya14busa/vim-asterisk'
 end,
 config = {
   display = {
     open_fn = require('packer.util').float,
   }
 }})
+

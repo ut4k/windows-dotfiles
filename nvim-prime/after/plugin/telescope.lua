@@ -129,17 +129,17 @@ vim.keymap.set('n', '<leader>fo', builtin.oldfiles, {noremap=true})
 -- [b]uffer [s]ymbols: list file symbols with treesitter
 
 -- [w]orkspace [symbols] using lsp
-vim.keymap.set('n', '<leader>ws', function()
-	local q=vim.fn.input("Symbol partial name > ")
-	builtin.lsp_workspace_symbols({query=q})
-end, {noremap=true})
+-- vim.keymap.set('n', '<leader>ws', function()
+-- 	local q=vim.fn.input("Symbol partial name > ")
+-- 	builtin.lsp_workspace_symbols({query=q})
+-- end, {noremap=true})
 
 -- [f]ind [f]ile
 -- vim.keymap.set('n', '<leader>ff', builtin.find_files, {noremap=true})
 vim.keymap.set('n', '<c-p>', builtin.find_files, {noremap=true})
 
--- [w]orkspace [d]iagnostic
-vim.keymap.set('n', '<leader>wd', builtin.diagnostics, {noremap=true})
+-- [d]iagnostic [w]orkspace
+vim.keymap.set('n', '<leader>dw', builtin.diagnostics, {noremap=true})
 
 -- search [f]iles in [g]it projects
 vim.keymap.set('n', '<leader>fg', builtin.git_files, {noremap=true})

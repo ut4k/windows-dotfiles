@@ -1,0 +1,1 @@
+Get-ChildItem -Path . -File -Recurse | Where-Object { -not $_.Attributes.HasFlag([System.IO.FileAttributes]::ReparsePoint) } | ForEach-Object { $_.FullName }
