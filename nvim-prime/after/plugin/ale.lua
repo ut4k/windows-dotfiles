@@ -2,12 +2,25 @@ vim.cmd[[
 let g:ale_linters = {
 \   'php': ['phpmd'],
 \   'go': ['staticcheck', 'golangci-lint', 'punused'],
+\   'vue': ['eslint'],
+\   'typescript': ['eslint', 'tsserver', 'typecheck'],
+\}
+
+let g:ale_fixers = {
+\	'vue': ['prettier'],
+\	'javascript': ['prettier'],
+\	'typescript': ['prettier', 'eslint']
 \}
 
 " let g:ale_php_phpcs_executable = 'C:\app\phpcs\PHP_CodeSniffer\bin\phpcs.bat'
 " let g:ale_php_phpcs_executable = 'C:\app\phpcs\PHP_CodeSniffer\bin\phpcs'
 " let g:ale_php_phpcs_standard = 'PSR2'
 " let g:ale_php_phpcs_use_global = 1
+
+let g:ale_typescript_tsc_options = '--noImplicitAny'
+
+
+let g:ale_fix_on_save = 1
 
 let g:ale_set_highlights = 1
 let g:ale_lint_on_insert_leave = 1

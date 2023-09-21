@@ -13,40 +13,6 @@ local actions_set = require('telescope.actions.set')
 local from_entry = require('telescope.from_entry')
 local actions_state = require('telescope.actions.state')
 
-require('telescope').setup{
-	defaults = {
-		layout_strategy = 'vertical',
-		layout_config = { height = 0.95 },
-	},
-  extensions = {
-    project = {
-      base_dirs = {
-        {'C:/workspace/'},
-        {'C:/workspace/surala-ibl/'},
-        {'C:/workspace/surala/'},
-      },
-      -- theme = "dropdown",
-      order_by = "asc",
-      search_by = "title",
-    }
-  },
-	live_grep_args = {
-		auto_quoting = false, -- enable/disable auto-quoting
-		-- define mappings, e.g.
-		mappings = { -- extend mappings
-		i = {
-			["<C-k>"] = lga_actions.quote_prompt(),
-			["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
-		},
-	},
-	-- ... also accepts theme settings, for example:
-	-- theme = "dropdown", -- use dropdown theme
-	-- theme = { }, -- use own theme spec
-	-- layout_config = { mirror=true }, -- mirror preview pane
-}
-}
-
-
 -- helper to search in config folder
 function Vimfiles()
 	-- folder of different system
@@ -161,7 +127,8 @@ vim.keymap.set('n', '<leader>cs', builtin.colorscheme, {noremap=true})
 
 -- vim.keymap.set('n', '<C-0>', ":lua require'telescope'.extensions.project.project{}<CR>", {noremap = true, silent = true})
 -- vim.keymap.set('n', '<C-0>', ":lua TsProjects()<CR>", {noremap = true, silent = true})
-vim.keymap.set('n', '<C-0>', ":lua Cd('C:\\\\workspace')<CR>", {noremap = true, silent = true})
+-- vim.keymap.set('n', '<C-0>', ":lua Cd('C:\\\\workspace')<CR>", {noremap = true, silent = true})
+vim.keymap.set('n', '<C-0>', ":lua Cd('D:\\\\projects')<CR>", {noremap = true, silent = true})
 
 vim.keymap.set('n', '<leader>cw', function()
 	builtin.grep_string({ search = vim.fn.expand('<cword>') })
