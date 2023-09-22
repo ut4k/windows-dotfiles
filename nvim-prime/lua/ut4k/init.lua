@@ -7,11 +7,11 @@
 -- force language into english
 vim.cmd.lang("en_US")
 
-require("simonced.options")
-require("simonced.remap")
-require("simonced.packer")
-require("simonced.auto")
-require("simonced.colors")
+require("ut4k.options")
+require("ut4k.remap")
+require("ut4k.packer")
+require("ut4k.auto")
+require("ut4k.colors")
 
 -- some abbreviations
 vim.cmd("iabbrev ve echo \"<pre>\"; print_r(); echo \"</pre>\"; // DBG<esc>F(a")
