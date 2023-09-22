@@ -1,7 +1,12 @@
 require("toggleterm").setup({
-  shell = "C:/msys64/usr/bin/bash.exe --login",
+
+	-- FOR MSYS
+  -- shell = "C:/msys64/usr/bin/bash.exe --login",
   -- direction = 'vertical' | 'horizontal' | 'tab' | 'float',
-  direction = 'tab',
+  -- direction = 'tab',
+
+	-- COMMON
+  direction = 'float'
 })
 
 local Terminal  = require('toggleterm.terminal').Terminal

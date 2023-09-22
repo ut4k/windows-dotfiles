@@ -73,10 +73,9 @@ end
 -- copy file name to clipboard
 vim.keymap.set('n', '<leader>fr', ':call v:lua.FileNameToReg()<cr>', { noremap = true })
 function FileNameToReg()
- vim.fn.system('clip.exe', vim.fn.expand("%:."))
+ local fpath = vim.fn.expand("%:."):gsub("\\","/")
+ vim.fn.system('clip.exe', fpath)
 end
-
-
 
 -- ---------------------------------------
 -- autocmd

@@ -53,6 +53,10 @@
 (straight-use-package 'ample-theme)
 (straight-use-package 'swiper)
 (straight-use-package 'emojify)
+(straight-use-package 'go-mode)
+(straight-use-package 'ob-go)
+
+
 
 ;; ---------------------------------
 ;; Basics
@@ -172,13 +176,18 @@ graphical display, but hide it if in terminal."
 ;; ---------------------------------
 ;; Babel
 ;; ---------------------------------
+(require 'ob-go)
+
 ;; plantuml.jarへのパスを設定
 (setq org-plantuml-jar-path "C:\\app\\plantuml\\plantuml.jar")
 
 ;; org-babelで使用する言語を登録
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((plantuml . t)))
+(org-babel-do-load-languages 'org-babel-load-languages
+ '(
+   (plantuml . t)
+   (go . t)
+  )
+)
 
 ;; ---------------------------------
 ;; Org Export

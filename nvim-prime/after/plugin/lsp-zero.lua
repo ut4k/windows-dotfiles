@@ -43,6 +43,7 @@ lspconfig.gopls.setup {
 -- Configure PHP WP LSP
 lspconfig.intelephense.setup({
 		-- root_dir = util.root_pattern(".git", "index.php"),
+	root_dir = require("lspconfig").util.root_pattern(".git", ".svn", "package.json"),
 	settings = {
 		intelephense = {
 			stubs = {

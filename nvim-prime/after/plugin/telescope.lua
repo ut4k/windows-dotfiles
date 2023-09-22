@@ -112,7 +112,7 @@ end
 
 function Cd(path)
     path = path or '.'
-    cdPicker(path, {"fd", ".", path, "--type=d", "--max-depth=1", "--", ".", path .. "\\surala-ibl"})
+    cdPicker(path, {"fd", ".", path, "--type=d", "--max-depth=1", "--", ".", path .. "\\surala-ibl", "--", ".", path .. "\\surala\\"})
 end
 
 function Cdz()
@@ -134,9 +134,16 @@ vim.keymap.set('n', '<leader>fo', builtin.oldfiles, {noremap=true})
 -- 	builtin.lsp_workspace_symbols({query=q})
 -- end, {noremap=true})
 
+function TelescopeFindFilesCustom()
+	-- local opts = {
+	-- 	file_ignore_patterns = { "ent/*" }
+	-- }
+	builtin.find_files(opts)
+end
+
 -- [f]ind [f]ile
--- vim.keymap.set('n', '<leader>ff', builtin.find_files, {noremap=true})
-vim.keymap.set('n', '<c-p>', builtin.find_files, {noremap=true})
+-- vim.keymap.set('n', '<c-p>', builtin.find_files, {noremap=true})
+vim.keymap.set('n', '<c-p>', TelescopeFindFilesCustom, {noremap=true})
 
 -- [d]iagnostic [w]orkspace
 vim.keymap.set('n', '<leader>dw', builtin.diagnostics, {noremap=true})
