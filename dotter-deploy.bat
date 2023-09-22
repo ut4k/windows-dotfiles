@@ -1,0 +1,2 @@
+sudo dotter deploy
+pause
