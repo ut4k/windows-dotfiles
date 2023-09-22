@@ -5,8 +5,10 @@ SetTitleMatchMode, 2
 ^!b::OpenInputForm()
 
 OpenInputForm() {
+	confFile = %a_scriptdir%/config/myahk.ini
+
 	; load config from external file
-	IniRead, BacklogUrl, ./config/myahk.ini, Common, OPEN_BACKLOG_URL
+	IniRead, BacklogUrl, %confFile%, Common, OPEN_BACKLOG_URL
 
     ; Display a custom message and an input box to capture user input
     InputBox, userInput, Backlog opener, Please Enter backlog issue key(ex. FOO-123):
