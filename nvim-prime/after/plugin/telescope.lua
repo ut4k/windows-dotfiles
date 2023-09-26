@@ -134,8 +134,8 @@ vim.keymap.set('n', '<leader>cs', builtin.colorscheme, {noremap=true})
 
 -- vim.keymap.set('n', '<C-0>', ":lua require'telescope'.extensions.project.project{}<CR>", {noremap = true, silent = true})
 -- vim.keymap.set('n', '<C-0>', ":lua TsProjects()<CR>", {noremap = true, silent = true})
--- vim.keymap.set('n', '<C-0>', ":lua Cd('C:\\\\workspace')<CR>", {noremap = true, silent = true})
-vim.keymap.set('n', '<C-0>', ":lua Cd('D:\\\\projects')<CR>", {noremap = true, silent = true})
+vim.keymap.set('n', '<C-0>', ":lua Cd(os.getenv('WORKSPACE'))<CR>", {noremap = true, silent = true})
+-- vim.keymap.set('n', '<C-0>', ":lua Cd('D:\\\\projects')<CR>", {noremap = true, silent = true})
 
 vim.keymap.set('n', '<leader>cw', function()
 	builtin.grep_string({ search = vim.fn.expand('<cword>') })

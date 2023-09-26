@@ -11,7 +11,7 @@ OpenInputForm() {
 	IniRead, BacklogUrl, %confFile%, Common, OPEN_BACKLOG_URL
 
     ; Display a custom message and an input box to capture user input
-    InputBox, userInput, Backlog opener, Please Enter backlog issue key(ex. FOO-123):
+    InputBox, userInput, Backlog opener, Please Enter backlog issue key(ex. FOO-123)
 	
     ; Check if the user entered something
     if (userInput) {
