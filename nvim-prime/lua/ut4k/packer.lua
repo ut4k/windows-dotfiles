@@ -152,6 +152,17 @@ return require('packer').startup({function(use)
 
 	use 'kevinhwang91/nvim-hlslens'
 	use 'haya14busa/vim-asterisk'
+
+	-- use {
+	-- 	'mrcjkb/haskell-tools.nvim',
+	-- 	requires = {
+	-- 		'nvim-lua/plenary.nvim',
+	-- 	},
+	-- 	version = '^2', -- Recommended
+	-- }
+
+	-- use 'neovimhaskell/haskell-vim'
+
 end,
 config = {
   display = {

@@ -4,6 +4,7 @@ let g:ale_linters = {
 \   'go': ['staticcheck', 'golangci-lint', 'punused'],
 \   'vue': ['eslint'],
 \   'typescript': ['eslint', 'tsserver', 'typecheck'],
+\   'haskell': [],
 \}
 
 let g:ale_fixers = {

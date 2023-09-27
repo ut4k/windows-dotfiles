@@ -1,2 +1,2 @@
-sudo dotter deploy
+sudo dotter deploy --force
 pause

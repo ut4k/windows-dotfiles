@@ -18,6 +18,9 @@ lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
 -- 			cmd = {"C:\\Users\\kimura.AZET\\AppData\\Local\\nvim-prime-data\\mason\\packages\\lua-language-server\\bin\\lua-language-server.exe"},
 -- })
 
+lspconfig.hls.setup(lsp)
+
+
 -- srn go settings
 lspconfig.gopls.setup {
 	cmd_env = {GOFLAGS="-tags=test_fixture,test_login"},
