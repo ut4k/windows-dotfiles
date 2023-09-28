@@ -135,4 +135,3 @@ autocmd VimEnter,SourcePost * :highlight! ALEVirtualTextWarning guifg=red guibg=
 autocmd VimEnter,SourcePost * :highlight! ALEVirtualTextStyleWarning guifg=red guibg=#151515
 autocmd VimEnter,SourcePost * :highlight! ALEVirtualTextInfo guifg=red guibg=#151515
 ]]
-
