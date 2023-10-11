@@ -55,9 +55,7 @@
 (straight-use-package 'emojify)
 (straight-use-package 'go-mode)
 (straight-use-package 'ob-go)
-
-
-
+(straight-use-package 'yaml-mode)
 ;; ---------------------------------
 ;; Basics
 ;; ---------------------------------
@@ -735,3 +733,19 @@ Version 2016-12-27"
     (goto-char url-http-end-of-headers)
     (prog1 (json-read)
       (kill-buffer))))
+
+(defun my-org-open-unc-link ()
+  "Open UNC links in Windows Explorer."
+  (interactive)
+  (let ((link (org-element-context)))
+    (if (string= (org-element-type link) "link")
+        (let ((path (org-element-property :path link)))
+          (if (string-match "^\\\\\\\\" path) ; Check if it's a UNC path
+              (progn
+                ;; Replace backslashes with forward slashes
+                (setq path (replace-regexp-in-string "\\\\" "/" path))
+                (w32-shell-execute "open" path)) ; Open in Windows Explorer
+            (org-open-at-point)))))) ; Open other links as usual
+
+;; Bind a key to the custom function (you can change the keybinding to your preference)
+(global-set-key (kbd "C-c o") 'my-org-open-unc-link)
