@@ -77,6 +77,44 @@ function FileNameToReg()
  vim.fn.system('clip.exe', fpath)
 end
 
+-- copy file name to clipboard
+function dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
+end
+function SymbolNameToReg()
+ local a = require('aerial')
+ local symbols = a.get_location(true)
+
+ local name = ''
+ -- print(dump(symbols))
+
+ for k,v in pairs(symbols) do
+  if v.kind == 'Class' then
+    name = v.name 
+  end
+  if v.kind == 'Method' then
+    name = name .. '::' .. v.name
+  end
+  if v.kind == 'Function' then
+    name = v.name
+  end
+ end
+ print(name)
+ vim.fn.system('clip.exe', name)
+ return name
+end
+-- [a]erial [r]egister
+vim.keymap.set('n', '<leader>ar', ':call v:lua.SymbolNameToReg()<cr>', { noremap = true })
+
 -- ---------------------------------------
 -- autocmd
 -- ---------------------------------------
@@ -90,6 +128,7 @@ function WslSync()
   local dp = vim.fn.getcwd()
   local cmd = 'php.exe "C:\\Users\\kimura.AZET\\scripts\\wsl_tools\\win\\wsl_sync.php" "'..fp..'" "'..dp..'"'
   vim.fn.system(cmd)
+vim.fn.system('clip.exe', cmd)
   print("wsl sync done.")
 end
 

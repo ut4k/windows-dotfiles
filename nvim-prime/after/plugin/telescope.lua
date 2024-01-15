@@ -101,9 +101,15 @@ vim.keymap.set('n', '<leader>fo', builtin.oldfiles, {noremap=true})
 -- end, {noremap=true})
 
 function TelescopeFindFilesCustom()
-	-- local opts = {
-	-- 	file_ignore_patterns = { "ent/*" }
-	-- }
+	local opts = {
+		file_ignore_patterns = {
+			"^ent/*",
+			"^www\\material\\flash\\*",
+			"^_www\\shared_lib\\aws-sdk\\*",
+			"^opt/*",
+		},
+		previewer = false,
+	}
 	builtin.find_files(opts)
 end
 
@@ -123,7 +129,12 @@ vim.keymap.set('n', '<leader>fg', builtin.git_files, {noremap=true})
 -- end,
 -- {noremap=true})
 
-vim.keymap.set('n', '<leader>gs', require("telescope").extensions.live_grep_args.live_grep_args, { noremap = true })
+vim.keymap.set('n', '<leader>gs', function()
+		require("telescope").extensions.live_grep_args.live_grep_args({
+			previewer = false,
+		})
+	end,
+	{ noremap = true })
 -- vim.keymap.set('n', '<leader>gs', live_grep_args_shortcuts.grep_word_under_cursor, { noremap = true })
 
 -- open buffers list

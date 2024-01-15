@@ -56,6 +56,7 @@
 (straight-use-package 'go-mode)
 (straight-use-package 'ob-go)
 (straight-use-package 'yaml-mode)
+(straight-use-package 'material-theme)
 ;; ---------------------------------
 ;; Basics
 ;; ---------------------------------
@@ -70,6 +71,8 @@
 (setq whitespace-style '(trailing tabs newline tab-mark newline-mark))
 ;;utf-8でバッファを読む
 (set-default 'buffer-file-coding-system 'utf-8-with-signature)
+;;カーソルを線に
+(setq-default cursor-type 'bar) 
 
 ;;messagesバッファにログを作らない
 (setq message-log-max nil)
@@ -749,3 +752,21 @@ Version 2016-12-27"
 
 ;; Bind a key to the custom function (you can change the keybinding to your preference)
 (global-set-key (kbd "C-c o") 'my-org-open-unc-link)
+
+
+  (defun set-buffer-variable-pitch ()
+    (interactive)
+    (variable-pitch-mode t)
+    (setq line-spacing 3)
+     (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+     (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
+     (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+     ;(set-face-attribute 'org-block-background nil :inherit 'fixed-pitch)
+    )
+
+  (add-hook 'org-mode-hook 'set-buffer-variable-pitch)
+  (add-hook 'eww-mode-hook 'set-buffer-variable-pitch)
+  (add-hook 'markdown-mode-hook 'set-buffer-variable-pitch)
+  (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
+
+ '(variable-pitch ((t (:height 200 :family "Georgia"))))

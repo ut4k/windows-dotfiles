@@ -51,3 +51,7 @@ vim.opt.title = true
 vim.opt.titlestring=vim.fn.getcwd()
 
 -- vim.cmd("GuiRenderLigatures 0")
+
+vim.opt.foldenable = false
+vim.opt.foldmethod = "marker"
+vim.opt.foldmarker = '{{{,}}}'

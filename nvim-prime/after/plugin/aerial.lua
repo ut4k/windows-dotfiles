@@ -15,7 +15,7 @@ require('aerial').setup({
     min_height = { 8, 0.1 },
 	},
   filter_kind = {
-    -- "Class",
+    "Class",
     -- "Constructor",
     -- "Enum",
     "Function",

@@ -1,23 +1,46 @@
+local dap = require("dap")
+require("nvim-dap-virtual-text").setup()
+
+-- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#PHP
+-- vscode-php-debugが必要
+dap.adapters.php = {
+  type = "executable",
+  command = "node",
+  args = { os.getenv("HOME") .. "/build/vscode-php-debug/out/phpDebug.js" }
+}
+
+dap.configurations.php = {
+  {
+    type = "php",
+    request = "launch",
+    name = "Listen for Xdebug",
+    port = 9003,
+    pathMappings = {
+      -- ["/var/www/html"] = "${workspaceFolder}"
+      ["/data/home/"] = "${workspaceFolder}"
+    },
+		-- log = true,
+  }
+}
+
 local function map(mode, lhs, rhs, opts)
 	local options = {noremap = true}
     if opts then options = vim.tbl_extend('force', options, opts) end
     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+map("n", "<F4>", ":lua require'dapui'.toggle()<CR>", { silent = true})
 map("n", "<F5>", ":lua require'dap'.continue()<CR>", { silent = true})
 map("n", "<F10>", ":lua require'dap'.step_over()<CR>", { silent = true})
 map("n", "<F11>", ":lua require'dap'.step_into()<CR>", { silent = true})
 map("n", "<F12>", ":lua require'dap'.step_out()<CR>", { silent = true})
 map("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>", { silent = true})
-map("n", "<leader>bc", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", { silent = true})
-map("n", "<leader>l", ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>", { silent = true})
+map("n", "<leader>bc", ":lua require'dap'.clear_breakpoints()<CR>", { silent = true})
+map("n", "<Leader>df", ":lua require'dapui'.eval(nil, { enter = true })<CR>", { silent = true})
 
 -- dap-ui key map
 map("n", "<leader>d", ":lua require'dapui'.toggle()<CR>", { silent = true})
 map("n", "<leader><leader>df", ":lua require'dapui'.eval()<CR>", { silent = true})
-
--- dap-go key map
-map("n", "<leader>td", ":lua require'dap-go'.debug_test()<CR>", { silent = true })
 
 require("dapui").setup({
 	icons = { expanded = "▾", collapsed = "▸", current_frame = "▸" },
@@ -56,7 +79,8 @@ require("dapui").setup({
 			elements = {
 				"repl",
 			},
-			size = 0.25, -- 25% of total lines
+			-- size = 0.25, -- 25% of total lines
+			size = 0.10, -- 25% of total lines
 			position = "bottom",
 		},
 	},
@@ -72,7 +96,7 @@ require("dapui").setup({
 			step_over = "",
 			step_out = "",
 			step_back = "",
-			run_last = "↻",
+			-- run_last = "↻",
 			terminate = "□",
 		},
 	},
@@ -91,105 +115,3 @@ require("dapui").setup({
 	}
 })
 
-require("dap-go").setup()
-local dap = require("dap")
-
-dap.adapters.go = function(callback, config)
-	local stdout = vim.loop.new_pipe(false)
-    local handle
-    local pid_or_err
-    local port = 38697
-    local opts = {
-		stdio = {nil, stdout},
-		args = {"dap", "-l", "127.0.0.1:" .. port},
-		detached = true
-    }
-    handle, pid_or_err = vim.loop.spawn("dlv", opts, function(code)
-		stdout:close()
-		handle:close()
-		if code ~= 0 then
-			print('dlv exited with code', code)
-		end
-    end)
-    assert(handle, 'Error running dlv: ' .. tostring(pid_or_err))
-    stdout:read_start(function(err, chunk)
-		assert(not err, err)
-		if chunk then
-			vim.schedule(function()
-				require('dap.repl').append(chunk)
-			end)
-		end
-    end)
-    -- Wait for delve to start
-    vim.defer_fn(
-		function()
-			callback({type = "server", host = "127.0.0.1", port = port})
-		end,
-		100)
-end
-
-dap.configurations.go = {
-	{
-		type = "go",
-		name = "Run test",
-		mode = "exec",
-		-- asRoot = true,
-		request = "launch",
-		-- program = "C:\\msys64\\msys2_shell.cmd",
-		-- program = "go.exe test -v -count=1 -tags=test_fixture ./pkg/domain",
-		program = function()
-			-- return "go.exe test -v -count=1 -tags=test_fixture ./pkg/domain"
-			return "C:\\Program Files\\Go\\bin\\go.exe"
-		end,
-		-- program = "C:\\Windows\\notepad.exe",
-		-- program = "kicksh.ps1",
-		showLog = true,
-		-- env = {
-		-- 	GOPATH = "C:\\Users\\kimura.AZET\\go"
-		-- },
-		-- program = "C:/msys64/msys2_shell.cmd -defterm -mingw64 -no-start -full-path -here -c 'make.sh testNotice'",
-		-- program = "C:\\Users\\kimura.AZET\\go\\bin\\richgo.exe test -v -count=1 -tags=test_fixture -run \"^Test.*(Notice|Teacher).*\"  ./.../",
-		-- program = function()
-		-- 	"C:\\Users\\kimura.AZET\\go\\bin\\richgo.exe test -v -count=1 -tags=test_fixture -run \"^Test.*(Notice|Teacher).*\"  ./.../"
-		-- end
-		-- program = "C:/msys64/msys2_shell.cmd -defterm -mingw64 -no-start -full-path -here",
-		-- args = {"-c make.sh"}
-		-- program = "C:\\msys64\\msys2_shell.cmd ",
-		-- program = "C:\\msys64\\msys2_shell.cmd"
-		-- program = '"' .. "C:/msys64/msys2_shell.cmd" .. '"' .. " -defterm -mingw64 -no-start -full-path -here -c ",
-		-- args = {"./make.sh testNotice"},
-		-- substitutePath = {
-		-- 	{
-		-- 		from = "${workingDirectory}",
-		-- 		to = "",
-		-- 	}
-		-- },
-
-		-- program = "C:/msys64/msys2_shell.cmd",
-		-- args = {
-		-- 	"-defterm", "-mingw64", "-no-start", "-full-path", "-here", "-c './make.sh testNotice'"
-		-- }
-		-- program = "${workspaceFolder}/make.sh",
-		-- args = {"testNotice"}
-	},
-	{
-		type = "go",
-		name = "Debug the golang",
-		request = "launch",
-		program = "${file}",
-		env = {
-			DB_USER = "docker",
-			DB_PASS = "docker",
-			DB_NAME = "sampledb"
-		}
-	},
-	{
-		type = "go",
-		name = "Debug the golang(sh)",
-		request = "launch",
-		-- mode = "exec",
-		program = "make.bat",
-	-- 	args = {"/c", "C:/msys64/msys2_shell.cmd", "-defterm", "-mingw64", "-no-start", "-full-path", "-here", "-c", "make.sh"},
-		-- args = {"/c", "C:/msys64/msys2_shell.cmd", "-defterm", "-mingw64", "-no-start", "-full-path", "-here", "-c", "make.sh"},
-	}
-}

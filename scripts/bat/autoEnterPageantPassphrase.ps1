@@ -19,7 +19,7 @@ foreach ($a in $app) {
 		$processID = $a.id
 	}
 }
-start-sleep -Milliseconds 500
+# start-sleep -Milliseconds 5
 [Microsoft.VisualBasic.Interaction]::AppActivate($processID)
 [System.Windows.Forms.SendKeys]::SendWait("$password{ENTER}")
 Clear-Variable -Name "password"

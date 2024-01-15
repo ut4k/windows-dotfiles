@@ -137,8 +137,6 @@ function StartNewNvim()
 end
 vim.keymap.set("n", "<leader>nv", ":lua StartNewNvim()<CR>", {remap = false})
 
-
-
 -- require('lint').linters_by_ft = {
   -- go = {'C:\\Users\\kimura.AZET\\go\\bin\\revive.exe',}
   -- go = {'revive.exe',}
@@ -160,20 +158,3 @@ vim.cmd[[
 ]]
 
 vim.keymap.set("n", "<leader>M", ":redir @a | silent map | redir END | new | put a<CR>", {remap = false})
-
--- vim-eft
-vim.cmd[[
-  nmap f <Plug>(eft-f)
-  xmap f <Plug>(eft-f)
-  omap f <Plug>(eft-f)
-  nmap F <Plug>(eft-F)
-  xmap F <Plug>(eft-F)
-  omap F <Plug>(eft-F)
-  
-  nmap t <Plug>(eft-t)
-  xmap t <Plug>(eft-t)
-  omap t <Plug>(eft-t)
-  nmap T <Plug>(eft-T)
-  xmap T <Plug>(eft-T)
-  omap T <Plug>(eft-T)
-]]

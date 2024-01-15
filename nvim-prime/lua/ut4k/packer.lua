@@ -99,6 +99,7 @@ return require('packer').startup({function(use)
 	-- debugger
 	use "mfussenegger/nvim-dap"
 	use "rcarriga/nvim-dap-ui"
+	use 'theHamsta/nvim-dap-virtual-text'
 	use "leoluz/nvim-dap-go"
 
 	-- workspace switching
@@ -117,17 +118,17 @@ return require('packer').startup({function(use)
 	use 'mfussenegger/nvim-lint'
 	use 'kevinhwang91/nvim-bqf'
 	use 'folke/todo-comments.nvim'
-	use {
-		'folke/noice.nvim',
-		requires = {
-			-- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-			"MunifTanjim/nui.nvim",
-			-- OPTIONAL:
-			--   `nvim-notify` is only needed, if you want to use the notification view.
-			--   If not available, we use `mini` as the fallback
-			"rcarriga/nvim-notify",
-		}
-	}
+	-- use {
+	-- 	'folke/noice.nvim',
+	-- 	requires = {
+	-- 		-- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+	-- 		"MunifTanjim/nui.nvim",
+	-- 		-- OPTIONAL:
+	-- 		--   `nvim-notify` is only needed, if you want to use the notification view.
+	-- 		--   If not available, we use `mini` as the fallback
+	-- 		"rcarriga/nvim-notify",
+	-- 	}
+	-- }
 	use {"akinsho/toggleterm.nvim", tag = '*'}
 	use 'dense-analysis/ale'
 
@@ -138,17 +139,17 @@ return require('packer').startup({function(use)
 	-- 	"narutoxy/dim.lua",
 	-- 	requires = { "nvim-treesitter/nvim-treesitter", "neovim/nvim-lspconfig" },
 	-- }
-	use 'vim-test/vim-test'
-	use 'hrsh7th/vim-eft'
-	use 'mg979/vim-visual-multi'
+	-- use 'vim-test/vim-test'
+	-- use 'hrsh7th/vim-eft'
+	-- use 'mg979/vim-visual-multi'
 
-	vim.cmd[[
-	aug VMlens
-	au!
-	au User visual_multi_start lua require('vmlens').start()
-	au User visual_multi_exit lua require('vmlens').exit()
-	aug END
-	]]
+	-- vim.cmd[[
+	-- aug VMlens
+	-- au!
+	-- au User visual_multi_start lua require('vmlens').start()
+	-- au User visual_multi_exit lua require('vmlens').exit()
+	-- aug END
+	-- ]]
 
 	use 'kevinhwang91/nvim-hlslens'
 	use 'haya14busa/vim-asterisk'
