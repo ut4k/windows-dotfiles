@@ -770,3 +770,32 @@ Version 2016-12-27"
   (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
 
  '(variable-pitch ((t (:height 200 :family "Georgia"))))
+
+(defun mouse-start-rectangle (start-event)
+  (interactive "e")
+  (deactivate-mark)
+  (mouse-set-point start-event)
+  (rectangle-mark-mode +1)
+  (let ((drag-event))
+    (track-mouse
+      (while (progn
+               (setq drag-event (read-event))
+               (mouse-movement-p drag-event))
+        (mouse-set-point drag-event)))))
+
+(global-set-key (kbd "S-<down-mouse-1>") #'mouse-start-rectangle)
+
+(defun calculate-org-subtree-total-hours ()
+  "Calculate the total hours in the current Org subtree."
+  (interactive)
+  (setq total-hours 0)
+  (org-map-entries
+   (lambda ()
+     (org-back-to-heading)
+     (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+       (re-search-forward "\\([0-9.]+\\)h" subtree-end t)
+       (setq total-hours (+ total-hours (string-to-number (match-string 1))))))
+   nil 'tree)
+  (message "Total hours: %s" total-hours))
+
+(global-set-key (kbd "C-c C-x t") 'calculate-org-subtree-total-hours)

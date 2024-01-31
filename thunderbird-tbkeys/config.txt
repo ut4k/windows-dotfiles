@@ -1,0 +1,8 @@
+{
+    "j": "cmd:cmd_nextMsg",
+    "k": "cmd:cmd_previousMsg",
+    "o": "cmd:cmd_openMessage",
+    "shift+h": "window.document.getElementById('mail3PaneTabBrowser1').contentWindow.document.getElementById('folderTree').focus();",
+    "shift+l": "(function () { var tree = window.document.getElementById('mail3PaneTabBrowser1').contentWindow.document.getElementById('threadTree'); tree.view.selection.select(0); })();",
+    "/"  : "cmd:cmd_toggleQuickFilterBar"
+}

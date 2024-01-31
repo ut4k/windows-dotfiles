@@ -55,3 +55,5 @@ vim.opt.titlestring=vim.fn.getcwd()
 vim.opt.foldenable = false
 vim.opt.foldmethod = "marker"
 vim.opt.foldmarker = '{{{,}}}'
+
+-- vim.opt.nofixeol = true
