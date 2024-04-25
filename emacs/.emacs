@@ -244,7 +244,7 @@ a link to this file."
 (global-set-key (kbd "C-x p") 'org-screenshot)
 
 (setq org-todo-keywords
-      '((sequence "[TODO]" "[課題起票]" "[作業中]" "[管理者レビュー待ち]" "[レビュー待ち]" "[返信済]" "[お返事待ち]" "|" "[完了]" "[調査済み]")))
+      '((sequence "[TODO]" "[作業中]" "[お返事待ち]" "|" "[完了]")))
 
 ;;勝手に改行するのを防ぐ
 (when (fboundp 'electric-indent-mode) (electric-indent-mode -1))
@@ -424,7 +424,7 @@ In interactive calls DELETE is the prefix arg."
 (setq org-ascii-bullets '((ascii ?- ?- ?-) (latin1 ?- ?- ?-) (utf-8 ?- ?- ?-)))
 
 ;;(setq org-bullets-bullet-list '("" "" "" "" "" "" "" "" "" ""))
-(setq org-bullets-bullet-list '("❖" "◆" "▼" "＊" "•" "•"))
+(setq org-bullets-bullet-list '("◎" "■" "▼" "・" "・" "・"))
 
 ;; org-superstar
 (setq inhibit-compacting-font-caches t)
@@ -625,14 +625,15 @@ In interactive calls DELETE is the prefix arg."
 
 (setq my-font "PlemolJP35 Console NF")
 ;(setq my-second-font "ＭＳ Ｐゴシック")
-(setq my-second-font "Terminus-ja")
+;(setq my-second-font "Terminus-ja")
+(setq my-second-font "PlemolJP35 Console NF")
 
 ;; Set the default font for all text
 (set-face-attribute 'default nil :family my-font :height 100 :weight 'normal)
 
 (defun set-org-font ()
   "Set the font for Org Mode buffers."
-  (face-remap-add-relative 'default :family my-second-font :height 120 :weight 'normal))
+  (face-remap-add-relative 'default :family my-second-font :height 100 :weight 'normal))
 
 (defun restore-default-font ()
   "Restore the default font for non-Org Mode buffers."
@@ -785,17 +786,57 @@ Version 2016-12-27"
 
 (global-set-key (kbd "S-<down-mouse-1>") #'mouse-start-rectangle)
 
-(defun calculate-org-subtree-total-hours ()
-  "Calculate the total hours in the current Org subtree."
-  (interactive)
-  (setq total-hours 0)
-  (org-map-entries
-   (lambda ()
-     (org-back-to-heading)
-     (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-       (re-search-forward "\\([0-9.]+\\)h" subtree-end t)
-       (setq total-hours (+ total-hours (string-to-number (match-string 1))))))
-   nil 'tree)
-  (message "Total hours: %s" total-hours))
+;; (defun calculate-org-subtree-total-hours ()
+;;   "Calculate the total hours in the current Org subtree."
+;;   (interactive)
+;;   (setq total-hours 0)
+;;   (org-map-entries
+;;    (lambda ()
+;;      (org-back-to-heading)
+;;      (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+;;        (re-search-forward "\\([0-9.]+\\)h" subtree-end t)
+;;        (setq total-hours (+ total-hours (string-to-number (match-string 1))))))
+;;    nil 'tree)
+;;   (message "Total hours: %s" total-hours))
 
-(global-set-key (kbd "C-c C-x t") 'calculate-org-subtree-total-hours)
+;; (global-set-key (kbd "C-c C-x t") 'calculate-org-subtree-total-hours)
+
+
+;; バッファ全体をパースしちゃうのでNG
+;; (defun org-sum-hours ()
+;;   "Calculate the sum of hours in the current buffer."
+;;   (interactive)
+;;   (save-excursion
+;;     (goto-char (point-min))
+;;     (let ((total 0))
+;;       (while (re-search-forward "\\([0-9]+\\.?[0-9]*\\)h" nil t)
+;;         (setq total (+ total (string-to-number (match-string 1)))))
+;;       (message "Total hours: %.1f" total))))
+
+;; マッチ行全体も出す
+(defun org-sum-hours ()
+  "Calculate the sum of hours in the current buffer."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (let ((total 0)
+          (matched-lines '())
+          (line-number 0))
+      (while (re-search-forward "^\\*+\\s-+\\(.*\\)\\s-+(\\([0-9]+\\(?:\\.[0-9]+\\)?\\)h)" nil t)
+        (setq total (+ total (string-to-number (match-string 2))))
+        (setq line-number (line-number-at-pos))
+        (add-to-list 'matched-lines (format "%d: %s" line-number (match-string 0)) t))
+      (message "Matched lines:\n%s\n-----------------------\nTotal: %.1fh" (mapconcat 'identity matched-lines "\n") total))))
+
+
+(defun org-sum-hours-no-save-excursion ()
+  "Calculate the sum of hours in the current buffer without saving the cursor position."
+  (interactive)
+  (setq total 0) ;; total 変数を定義し、初期値を設定
+  (goto-char (point-min))
+  (while (re-search-forward "\\([0-9]+\\.?[0-9]*\\)h" nil t)
+    (setq total (+ total (string-to-number (match-string 1))))) ;; total 変数を更新
+  (message "Total hours: %.1f" total))
+
+;; (global-set-key (kbd "C-c C-x t") 'org-sum-hours)
+(global-set-key (kbd "C-c C-x t") 'org-sum-hours)

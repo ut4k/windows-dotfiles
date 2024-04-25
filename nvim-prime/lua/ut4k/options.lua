@@ -57,3 +57,4 @@ vim.opt.foldmethod = "marker"
 vim.opt.foldmarker = '{{{,}}}'
 
 -- vim.opt.nofixeol = true
+vim.cmd("set nofixeol")

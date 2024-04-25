@@ -158,3 +158,8 @@ vim.cmd[[
 ]]
 
 vim.keymap.set("n", "<leader>M", ":redir @a | silent map | redir END | new | put a<CR>", {remap = false})
+
+
+
+vim.keymap.set("t", "<Leader>t", "<C-\\><C-n>:ToggleTerm<CR>", {remap = false})
+vim.keymap.set("n", "<Leader>t", ":ToggleTerm<CR>", {remap = false})

@@ -122,14 +122,33 @@ vim.keymap.set('n', '<leader>ar', ':call v:lua.SymbolNameToReg()<cr>', { noremap
 --  local path = vim.fn.system('wslpath -w ' .. path)
 --  return vim.fn.strcharpart(path, 0, vim.fn.strlen(path)-1)
 -- end
+function GetParentFolder()
+    local cwd = vim.fn.getcwd()
+    local parentFolder = vim.fn.fnamemodify(cwd, ":h")
+    return parentFolder
+end
 
 function WslSync()
   local fp = vim.fn.expand("%:p")
   local dp = vim.fn.getcwd()
+	fp = fp:gsub("^C:", "c:")
+	dp = dp:gsub("^C:", "c:")
+
+	-- print(GetParentFolder())
+	if GetParentFolder() == "C:\\workspace\\surala" then
+		dp = "c:\\workspace\\surala"
+	end
+
   local cmd = 'php.exe "C:\\Users\\kimura.AZET\\scripts\\wsl_tools\\win\\wsl_sync.php" "'..fp..'" "'..dp..'"'
-  vim.fn.system(cmd)
-vim.fn.system('clip.exe', cmd)
-  print("wsl sync done.")
+
+  print("-----------")
+  print("[WSL SYNC]")
+  res = vim.fn.system(cmd)
+	print("  [CMD]\n  "..cmd)
+  -- vim.fn.system('clip.exe', cmd)
+  -- print("-----------")
+
+  print(res)
 end
 
 -- SuralaLocal
@@ -174,3 +193,4 @@ autocmd VimEnter,SourcePost * :highlight! ALEVirtualTextWarning guifg=red guibg=
 autocmd VimEnter,SourcePost * :highlight! ALEVirtualTextStyleWarning guifg=red guibg=#151515
 autocmd VimEnter,SourcePost * :highlight! ALEVirtualTextInfo guifg=red guibg=#151515
 ]]
+
