@@ -134,11 +134,6 @@ function WslSync()
 	fp = fp:gsub("^C:", "c:")
 	dp = dp:gsub("^C:", "c:")
 
-	-- print(GetParentFolder())
-	if GetParentFolder() == "C:\\workspace\\surala" then
-		dp = "c:\\workspace\\surala"
-	end
-
   local cmd = 'php.exe "C:\\Users\\kimura.AZET\\scripts\\wsl_tools\\win\\wsl_sync.php" "'..fp..'" "'..dp..'"'
 
   print("-----------")
@@ -150,15 +145,6 @@ function WslSync()
 
   print(res)
 end
-
--- SuralaLocal
-vim.cmd[[
-augroup FileWatcher
- autocmd!
- autocmd BufWritePost C:/workspace/surala/* call v:lua.WslSync()
- autocmd BufWritePost C:/workspace/surala_game/* call v:lua.WslSync()
-augroup END
-]]
 
 function ConvertDateFormat()
     local line = vim.api.nvim_get_current_line()
