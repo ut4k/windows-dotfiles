@@ -1,4 +1,10 @@
-require('hlslens').setup()
+-- require('hlslens').setup()
+require('hlslens').setup({
+    auto_enable = {
+        description = [[Enable nvim-hlslens automatically]],
+        default = false
+    },
+})
 
 local kopts = {noremap = true, silent = true}
 

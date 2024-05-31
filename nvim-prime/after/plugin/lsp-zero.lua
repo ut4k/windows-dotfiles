@@ -47,6 +47,7 @@ lspconfig.gopls.setup {
 lspconfig.intelephense.setup({
 		-- root_dir = util.root_pattern(".git", "index.php"),
 	root_dir = require("lspconfig").util.root_pattern(".git", ".svn", "package.json"),
+	single_file_support = true,
 	settings = {
 		intelephense = {
 			stubs = {
