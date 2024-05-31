@@ -78,7 +78,8 @@ end
 
 function Cd(path)
     path = path or '.'
-    cdPicker(path, {"fd", ".", path, "--type=d", "--max-depth=1", "--", ".", path .. "\\surala-ibl", "--", ".", path .. "\\surala\\"})
+    -- cdPicker(path, {"fd", ".", path, "--type=d", "--max-depth=1", "--", ".", path .. "\\surala-ibl", "--", ".", path .. "\\surala\\"})
+    cdPicker(path, {"fd", ".", path, "--type=d", "--max-depth=1"})
 end
 
 function Cdz()
